@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.EmailSentController"
+      stylesheets="@/styles/email-sent.css"
+      styleClass="main-container">
+
+    <!-- Left Section - Email Sent Confirmation -->
+    <VBox styleClass="left-section" HBox.hgrow="ALWAYS">
+        <children>
+            <!-- Logo Section -->
+            <HBox styleClass="logo-container">
+                <StackPane styleClass="logo-circle">
+                    <ImageView fitHeight="24" fitWidth="24" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@/imgs/logo.png" />
+                    </ImageView>
+                </StackPane>
+                <Label text="AgriLink" styleClass="logo-text" />
+            </HBox>
+
+            <!-- ScrollPane for Content -->
+            <ScrollPane fitToWidth="true" styleClass="content-scroll-pane" VBox.vgrow="ALWAYS">
+                <content>
+                    <!-- Confirmation Container -->
+                    <VBox styleClass="confirmation-container">
+                        <!-- Checkmark Icon -->
+                        <StackPane styleClass="checkmark-container">
+                            <StackPane styleClass="checkmark-circle">
+                                <ImageView fitHeight="32" fitWidth="32" pickOnBounds="true" preserveRatio="true">
+                                    <Image url="@/imgs/logo.png" />
+                                </ImageView>
+                            </StackPane>
+                        </StackPane>
+
+                        <!-- Confirmation Message -->
+                        <Label text="Email envoyé" styleClass="confirmation-title" />
+                        <Label fx:id="confirmationMessage"
+                               text="Nous avons envoyé un lien de réinitialisation à example@gmail.com"
+                               styleClass="confirmation-description" wrapText="true" />
+
+                        <!-- Next Steps -->
+                        <VBox styleClass="next-steps-container">
+                            <Label text="Prochaines étapes :" styleClass="next-steps-title" />
+                            <VBox styleClass="steps-list">
+                                <HBox styleClass="step-item">
+                                    <Label text="1. " styleClass="step-number" />
+                                    <Label text="Vérifiez votre boîte de réception et vos spams"
+                                           styleClass="step-text" wrapText="true" />
+                                </HBox>
+                                <HBox styleClass="step-item">
+                                    <Label text="2. " styleClass="step-number" />
+                                    <Label text="Cliquez sur le lien dans l'email"
+                                           styleClass="step-text" wrapText="true" />
+                                </HBox>
+                                <HBox styleClass="step-item">
+                                    <Label text="3. " styleClass="step-number" />
+                                    <Label text="Créez un nouveau mot de passe"
+                                           styleClass="step-text" wrapText="true" />
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Resend Button -->
+                        <Button fx:id="resendButton" styleClass="resend-button" onAction="#handleResendLink">
+                            <graphic>
+                                <HBox spacing="8" alignment="CENTER">
+                                    <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+                                        <Image url="@/imgs/logo.png" />
+                                    </ImageView>
+                                    <Label text="Renvoyer le lien" styleClass="resend-text" />
+                                </HBox>
+                            </graphic>
+                        </Button>
+
+                        <!-- Back to Login Link -->
+                        <HBox styleClass="back-link-container">
+                            <Button fx:id="backButton" styleClass="back-button" onAction="#handleNavigateToConnexion">
+                                <graphic>
+                                    <HBox spacing="8">
+                                        <Label text="←" styleClass="back-arrow" />
+                                        <Label text="Retour à la connexion" styleClass="back-text" />
+                                    </HBox>
+                                </graphic>
+                            </Button>
+                        </HBox>
+
+                        <!-- Help Text -->
+                        <Label text="Vous n'avez pas reçu l'email ? Vérifiez vos spams ou"
+                               styleClass="help-text" wrapText="true" />
+                        <Hyperlink text="contactez le support" styleClass="support-link"
+                                   onAction="#handleContactSupport" />
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </children>
+    </VBox>
+
+    <!-- Right Section - Marketing Content -->
+    <VBox styleClass="right-section" HBox.hgrow="ALWAYS">
+        <children>
+            <!-- Download Icon -->
+            <StackPane styleClass="download-icon-container">
+                <StackPane styleClass="download-icon-circle">
+                    <ImageView fitHeight="32" fitWidth="32" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@/imgs/logo.png" />
+                    </ImageView>
+                </StackPane>
+            </StackPane>
+
+            <!-- Marketing Content -->
+            <VBox styleClass="marketing-content">
+                <Label text="Cultivons ensemble un avenir durable" styleClass="marketing-title" wrapText="true" />
+                <Label text="Rejoignez notre communauté d'agriculteurs et de consommateurs engagés pour une agriculture éthique, locale et durable."
+                       styleClass="marketing-description" wrapText="true" />
+
+                <!-- Testimonial -->
+                <VBox styleClass="testimonial-container">
+                    <Label text="&quot;AgriLink a transformé ma façon de cultiver et de vendre mes produits.&quot;"
+                           styleClass="testimonial-text" wrapText="true" />
+                    <Label text="Marie Dupont, Agricultrice bio" styleClass="testimonial-author" />
+                </VBox>
+            </VBox>
+        </children>
+    </VBox>
+</HBox>

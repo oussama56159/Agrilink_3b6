@@ -1,0 +1,329 @@
+/* Main Containers */
+.main-container {
+    -fx-background-color: #f8f9f3; /* Light cream background */
+}
+
+/* Scrollbar styling */
+.content-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+.content-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.content-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.content-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 5px;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    -fx-background-color: #2e6e4a; /* Dark green background */
+    -fx-min-width: 200px;
+    -fx-padding: 0;
+}
+
+.logo-container {
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+    -fx-background-color: #2e6e4a; /* Same as sidebar */
+}
+
+.logo-text {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.logo-icon {
+    -fx-fill: white;
+}
+
+.nav-section {
+    -fx-spacing: 0;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-alignment: center-left;
+    -fx-padding: 12px 15px;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-min-width: 200px;
+}
+
+.nav-button:hover {
+    -fx-background-color: #3a7d57; /* Slightly lighter green for hover */
+}
+
+.active-nav {
+    -fx-background-color: #3a7d57; /* Slightly lighter green for active */
+    -fx-text-fill: white;
+    -fx-font-weight: normal;
+}
+
+.user-info {
+    -fx-padding: 15px;
+    -fx-spacing: 5px;
+    -fx-alignment: center-left;
+    -fx-background-color: #2e6e4a; /* Same as sidebar */
+}
+
+.sidebar-username {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.sidebar-email {
+    -fx-text-fill: #c5e1d3; /* Light green for email */
+    -fx-font-size: 12px;
+}
+
+.sidebar-spacer {
+    -fx-min-height: 20px;
+}
+
+/* Content Area Styling - Updated to match the new design */
+.content-area {
+    -fx-background-color: #f8f9f3; /* Light cream background */
+    -fx-padding: 0;
+}
+
+/* Profile Header Banner */
+.profile-banner {
+    -fx-background-color: linear-gradient(to right, #2e6e4a, #8bc5a6);
+    -fx-min-height: 120px;
+    -fx-pref-height: 120px;
+}
+
+/* Profile Header */
+.profile-header {
+    -fx-padding: 0 30px 20px 30px;
+    -fx-spacing: 15px;
+}
+
+.profile-photo-container {
+    -fx-translate-y: -40px;
+}
+
+.profile-photo-circle {
+    -fx-fill: #f0f0f0;
+    -fx-stroke: white;
+    -fx-stroke-width: 3px;
+}
+
+.profile-info {
+    -fx-spacing: 5px;
+    -fx-padding: 0 0 0 10px;
+}
+
+.user-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.location-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: #666666;
+}
+
+.edit-profile-btn {
+    -fx-background-color: #2e6e4a;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+}
+
+.edit-profile-btn:hover {
+    -fx-background-color: #1d4c32;
+}
+
+/* Content Grid */
+.content-grid {
+    -fx-padding: 0 20px 20px 20px;
+    -fx-hgap: 20px;
+    -fx-vgap: 20px;
+}
+
+/* Card Styling */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
+}
+
+/* About Section */
+.about-section {
+    -fx-spacing: 10px;
+}
+
+.section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.about-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: #333333;
+    -fx-wrap-text: true;
+}
+
+/* Stats Card */
+.stat-card {
+    -fx-alignment: center;
+    -fx-spacing: 5px;
+}
+
+.stat-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+    -fx-alignment: center;
+}
+
+.stat-value {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e6e4a;
+    -fx-alignment: center;
+}
+
+/* Contact Information */
+.contact-section {
+    -fx-spacing: 15px;
+}
+
+.contact-item {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+}
+
+.contact-icon {
+    -fx-fill: #2e6e4a;
+}
+
+.contact-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: #333333;
+}
+
+/* Certifications */
+.certification-section {
+    -fx-spacing: 15px;
+}
+
+.certification-container {
+    -fx-spacing: 10px;
+    -fx-wrap-text: true;
+}
+
+.certification-badge {
+    -fx-background-color: #f0f7f0;
+    -fx-background-radius: 4px;
+    -fx-padding: 5px 10px;
+    -fx-font-size: 12px;
+    -fx-text-fill: #2e6e4a;
+    -fx-graphic-text-gap: 5px;
+}
+
+.certification-icon {
+    -fx-fill: #2e6e4a;
+}
+
+/* Tabs */
+.profile-tabs {
+    -fx-background-color: white;
+    -fx-padding: 0;
+    -fx-spacing: 0;
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.tab-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #666666;
+    -fx-font-size: 14px;
+    -fx-padding: 15px 20px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 2px 0;
+    -fx-min-width: 120px;
+    -fx-alignment: center;
+}
+
+.tab-button:hover {
+    -fx-text-fill: #2e6e4a;
+}
+
+.active-tab {
+    -fx-background-color: #2e6e4a;
+    -fx-text-fill: white;
+}
+
+.tab-content-container {
+    -fx-background-color: white;
+    -fx-background-radius: 0 0 8px 8px;
+    -fx-padding: 30px;
+    -fx-min-height: 200px;
+}
+
+.tab-content {
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+}
+
+.empty-state {
+    -fx-alignment: center;
+    -fx-spacing: 15px;
+    -fx-padding: 30px;
+}
+
+.empty-state-icon {
+    -fx-fill: #8bc5a6;
+}
+
+.empty-state-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e6e4a;
+}
+
+.empty-state-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666;
+    -fx-text-alignment: center;
+}
+
+.add-product-btn {
+    -fx-background-color: #2e6e4a;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+    -fx-graphic-text-gap: 5px;
+}
+
+.add-product-btn:hover {
+    -fx-background-color: #1d4c32;
+}
+
+.add-icon {
+    -fx-fill: white;
+}

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ScrollPane?>
+
+<BorderPane stylesheets="@/styles/usermanagement.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DashboradController">
+    <left>
+        <VBox prefWidth="200" styleClass="sidebar">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="logo-container">
+                <padding>
+                    <Insets bottom="15" left="15" right="15" top="15" />
+                </padding>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../imgs/logo.png" />
+                    </image>
+                </ImageView>
+                <Label styleClass="logo-text" text="AgriLink" />
+            </HBox>
+
+            <Button fx:id="dashboardBtn" styleClass="sidebar-button, active-sidebar-button" text="Tableau de bord" />
+            <Button fx:id="usersBtn" styleClass="sidebar-button" text="Utilisateurs" />
+            <Button fx:id="productsBtn" styleClass="sidebar-button" text="Produits" />
+            <Button fx:id="statisticsBtn" styleClass="sidebar-button" text="Statistiques" />
+            <Button fx:id="settingsBtn" styleClass="sidebar-button" text="Paramètres" />
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <Button fx:id="logoutBtn" onAction="#handleLogout" styleClass="sidebar-button, logout-button" text="Déconnexion" />
+            <Button fx:id="viewPf" onAction="#navigateToUserProfile" prefHeight="25.0" prefWidth="87.0" styleClass="sidebar-button, admin-button" text="user" />
+
+            <HBox alignment="CENTER_LEFT" spacing="5" styleClass="admin-section">
+                <padding>
+                    <Insets bottom="15" left="15" right="15" top="15" />
+                </padding>
+                <Label fx:id="MailLabel" styleClass="admin-email" text="user@agrilink.com" />
+                <VBox />
+            </HBox>
+        </VBox>
+    </left>
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="dashboard-content">
+            <VBox spacing="20" styleClass="dashboard-container">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <!-- Welcome Section -->
+                <VBox styleClass="welcome-section">
+                    <Label styleClass="welcome-title" text="Bienvenue sur AgriLink"/>
+                    <Label styleClass="welcome-subtitle" text="Votre plateforme pour l'agriculture éthique, locale et durable"/>
+                </VBox>
+
+                <!-- Statistics Cards -->
+                <HBox spacing="15" styleClass="stats-container">
+                    <!-- User Type Statistics -->
+                    <VBox styleClass="stats-card">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="👥" styleClass="stats-emoji"/>
+                            <Label text="Acheteurs" styleClass="stats-title"/>
+                        </HBox>
+                        <Label fx:id="acheteurCount" text="0" styleClass="stats-number"/>
+                        <Label text="Utilisateurs acheteurs" styleClass="stats-subtitle"/>
+                    </VBox>
+
+                    <VBox styleClass="stats-card">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="🌾" styleClass="stats-emoji"/>
+                            <Label text="Agriculteurs" styleClass="stats-title"/>
+                        </HBox>
+                        <Label fx:id="agriculteurCount" text="0" styleClass="stats-number"/>
+                        <Label text="Utilisateurs agriculteurs" styleClass="stats-subtitle"/>
+                    </VBox>
+
+                    <VBox styleClass="stats-card">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="🏪" styleClass="stats-emoji"/>
+                            <Label text="Grossistes" styleClass="stats-title"/>
+                        </HBox>
+                        <Label fx:id="grossisteCount" text="0" styleClass="stats-number"/>
+                        <Label text="Utilisateurs grossistes" styleClass="stats-subtitle"/>
+                    </VBox>
+
+                    <!-- Popular Products Card -->
+                    <VBox styleClass="stats-card">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="🛒" styleClass="stats-emoji"/>
+                            <Label text="Produits populaires" styleClass="stats-title"/>
+                        </HBox>
+                        <Label text="24" styleClass="stats-number"/>
+                        <Label text="+12% par rapport à la semaine dernière" styleClass="stats-subtitle"/>
+                    </VBox>
+
+                    <!-- Upcoming Events Card -->
+                    <VBox styleClass="stats-card">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="📅" styleClass="stats-emoji"/>
+                            <Label text="Évènements à venir" styleClass="stats-title"/>
+                        </HBox>
+                        <Label text="8" styleClass="stats-number"/>
+                        <Label text="3 évènements cette semaine" styleClass="stats-subtitle"/>
+                    </VBox>
+
+                    <!-- Active Discussions Card -->
+                    <VBox styleClass="stats-card">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="💬" styleClass="stats-emoji"/>
+                            <Label text="Discussions actives" styleClass="stats-title"/>
+                        </HBox>
+                        <Label text="12" styleClass="stats-number"/>
+                        <Label text="+18% de participation" styleClass="stats-subtitle"/>
+                    </VBox>
+
+                    <!-- Collaborative Projects Card -->
+                    <VBox styleClass="stats-card">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="🤝" styleClass="stats-emoji"/>
+                            <Label text="Projets collaboratifs" styleClass="stats-title"/>
+                        </HBox>
+                        <Label text="7" styleClass="stats-number"/>
+                        <Label text="2 nouveaux cette semaine" styleClass="stats-subtitle"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Content Sections -->
+                <HBox spacing="20">
+                    <!-- Best Rated Products Section -->
+                    <VBox styleClass="content-section" HBox.hgrow="ALWAYS">
+                        <Label text="Produits les mieux notés" styleClass="section-title"/>
+                        <Label text="Les produits les plus appréciés par la communauté" styleClass="section-subtitle"/>
+                        
+                        <!-- Product List -->
+                        <VBox spacing="10" styleClass="product-list">
+                            <!-- Product 1 -->
+                            <HBox styleClass="product-item" alignment="CENTER_LEFT" spacing="10">
+                                <Label text="🌱" styleClass="product-emoji"/>
+                                <VBox>
+                                    <Label text="Produit bio #1" styleClass="product-name"/>
+                                    <Label text="Ferme locale" styleClass="product-source"/>
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="★★★★★" styleClass="product-rating"/>
+                            </HBox>
+
+                            <!-- Product 2 -->
+                            <HBox styleClass="product-item" alignment="CENTER_LEFT" spacing="10">
+                                <Label text="🌱" styleClass="product-emoji"/>
+                                <VBox>
+                                    <Label text="Produit bio #2" styleClass="product-name"/>
+                                    <Label text="Ferme locale" styleClass="product-source"/>
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="★★★★★" styleClass="product-rating"/>
+                            </HBox>
+
+                            <!-- Product 3 -->
+                            <HBox styleClass="product-item" alignment="CENTER_LEFT" spacing="10">
+                                <Label text="🌱" styleClass="product-emoji"/>
+                                <VBox>
+                                    <Label text="Produit bio #3" styleClass="product-name"/>
+                                    <Label text="Ferme locale" styleClass="product-source"/>
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="★★★★★" styleClass="product-rating"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Upcoming Events Section -->
+                    <VBox styleClass="content-section" HBox.hgrow="ALWAYS">
+                        <Label text="Événements à venir" styleClass="section-title"/>
+                        <Label text="Ne manquez pas ces événements près de chez vous" styleClass="section-subtitle"/>
+                        
+                        <!-- Events List -->
+                        <VBox spacing="10" styleClass="events-list">
+                            <!-- Event 1 -->
+                            <HBox styleClass="event-item" alignment="CENTER_LEFT" spacing="10">
+                                <Label text="📅" styleClass="event-emoji"/>
+                                <VBox>
+                                    <Label text="Marché bio" styleClass="event-name"/>
+                                    <Label text="12 avril 2025" styleClass="event-date"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Event 2 -->
+                            <HBox styleClass="event-item" alignment="CENTER_LEFT" spacing="10">
+                                <Label text="📅" styleClass="event-emoji"/>
+                                <VBox>
+                                    <Label text="Atelier compostage" styleClass="event-name"/>
+                                    <Label text="18 avril 2025" styleClass="event-date"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Event 3 -->
+                            <HBox styleClass="event-item" alignment="CENTER_LEFT" spacing="10">
+                                <Label text="📅" styleClass="event-emoji"/>
+                                <VBox>
+                                    <Label text="Visite de ferme" styleClass="event-name"/>
+                                    <Label text="25 avril 2025" styleClass="event-date"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

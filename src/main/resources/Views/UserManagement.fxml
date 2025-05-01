@@ -36,6 +36,7 @@
             </HBox>
 
             <Button fx:id="dashboardBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Tableau de bord" />
+            <Button fx:id="forumBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Forum" />
             <Button fx:id="usersBtn" onAction="#handleNavigation" styleClass="sidebar-button, active-sidebar-button" text="Utilisateurs" />
             <Button fx:id="productsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Produits" />
             <Button fx:id="statisticsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Statistiques" />
@@ -130,7 +131,7 @@
                     </TableView>
 
                     <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="pagination-container">
-                        <Text styleClass="pagination-text" text="Affichage de 1 à 6 sur 24 utilisateurs" />
+                        <Label fx:id="paginationText" styleClass="pagination-text" text="Affichage de 1 à 6 sur 24 utilisateurs" />
                         <ComboBox fx:id="pageSize" styleClass="page-size-combo" value="10" />
                         <Button fx:id="prevPage" onAction="#handlePagination" styleClass="pagination-button" text="&lt;" />
                         <Button fx:id="nextPage" onAction="#handlePagination" styleClass="pagination-button" text="&gt;" />

@@ -10,6 +10,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import services.EmailService;
+import services.UserService;
+import services.UserServiceImpl;
+import services.GoogleAuthService;
 
 public class EmailSentController implements Initializable {
 
@@ -23,9 +29,17 @@ public class EmailSentController implements Initializable {
     private Button backButton;
 
     private String userEmail;
+    private EmailService emailService;
+    private UserService userService;
+    private GoogleAuthService googleAuthService;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Initialize services
+        emailService = new EmailService();
+        userService = new UserServiceImpl();
+        googleAuthService = new GoogleAuthService();
+        
         // Initialize with default email (this would normally be passed from the previous screen)
         userEmail = "example@gmail.com";
         updateConfirmationMessage();
@@ -44,16 +58,36 @@ public class EmailSentController implements Initializable {
      * Updates the confirmation message with the current email address
      */
     private void updateConfirmationMessage() {
-        confirmationMessage.setText("Nous avons envoyé un lien de réinitialisation à " + userEmail);
+        confirmationMessage.setText("Nous avons envoyé un nouveau mot de passe à " + userEmail);
     }
 
     @FXML
     private void handleResendLink(ActionEvent event) {
-        // Implement resend logic here
-        System.out.println("Resending password reset link to: " + userEmail);
+        try {
+            // Generate a new random password
+            String newPassword = googleAuthService.generateRandomPassword();
+            
+            // Update the user's password in the database
+            userService.updatePassword(userEmail, newPassword);
+            
+            // Send the new password via email
+            emailService.sendPasswordResetEmail(userEmail, newPassword);
 
-        // In a real application, you would resend the email
-        // You could also show a confirmation message or disable the button temporarily
+            // Show success message
+            showAlert(AlertType.INFORMATION, "Succès", "Un nouveau mot de passe a été envoyé à " + userEmail);
+            
+        } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Erreur", "Une erreur est survenue lors de l'envoi du nouveau mot de passe");
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     @FXML
@@ -74,10 +108,7 @@ public class EmailSentController implements Initializable {
 
     @FXML
     private void handleContactSupport(ActionEvent event) {
-        // Implement contact support logic
-        System.out.println("Opening support contact page");
-
-        // In a real application, you would navigate to a support page
-        // or open a support dialog
+        // Implement contact support logic here
+        System.out.println("Contact support clicked");
     }
 }

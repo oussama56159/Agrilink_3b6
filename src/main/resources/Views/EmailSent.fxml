@@ -55,12 +55,12 @@
                                 </HBox>
                                 <HBox styleClass="step-item">
                                     <Label text="2. " styleClass="step-number" />
-                                    <Label text="Cliquez sur le lien dans l'email"
+                                    <Label text="Utilisez le nouveau mot de passe pour vous connecter"
                                            styleClass="step-text" wrapText="true" />
                                 </HBox>
                                 <HBox styleClass="step-item">
                                     <Label text="3. " styleClass="step-number" />
-                                    <Label text="Créez un nouveau mot de passe"
+                                    <Label text="Changez votre mot de passe après votre première connexion"
                                            styleClass="step-text" wrapText="true" />
                                 </HBox>
                             </VBox>

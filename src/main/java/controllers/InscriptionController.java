@@ -220,9 +220,8 @@ public class InscriptionController implements Initializable {
                     emailField.getText(),
                     passwordField.getText(), // Include password
                     "utilisateur", // default role
-
-                    userTypeComboBox.getValue(),
-                    "ACTIVE", // default status
+                    "Acheteur", // default type
+                    "Actif", // default status
                     LocalDate.now()
             );
 
@@ -231,8 +230,6 @@ public class InscriptionController implements Initializable {
             newUser.setCity(cityField.getText());
             newUser.setPostalCode(postalCodeField.getText());
             newUser.setProfileImagePath(profileImagePath);
-
-
 
             System.out.println("User object created successfully, attempting to save to database...");
 

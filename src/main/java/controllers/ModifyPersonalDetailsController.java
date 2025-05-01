@@ -89,50 +89,90 @@ public class ModifyPersonalDetailsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Initialize the user service
         try {
+            // Initialize the user service
             userService = new UserServiceImpl();
-            System.out.println("UserService initialized successfully in UserModifyController");
+            System.out.println("UserService initialized successfully in ModifyPersonalDetailsController");
+
+            // Initialize all ComboBoxes with their values
+            if (roleComboBox != null) {
+                roleComboBox.setItems(FXCollections.observableArrayList("Administrateur", "utilisateur"));
+                System.out.println("Role ComboBox initialized");
+            } else {
+                System.err.println("Warning: roleComboBox is null");
+            }
+
+            if (typeComboBox != null) {
+                typeComboBox.setItems(FXCollections.observableArrayList("Acheteur", "Agriculteur", "Grossiste"));
+                System.out.println("Type ComboBox initialized");
+            } else {
+                System.err.println("Warning: typeComboBox is null");
+            }
+
+            if (statusComboBox != null) {
+                statusComboBox.setItems(FXCollections.observableArrayList("Actif", "Inactif", "En attente", "Suspendu"));
+                System.out.println("Status ComboBox initialized");
+            } else {
+                System.err.println("Warning: statusComboBox is null");
+            }
+
+            // Set current date as default for registration date
+            if (registrationDatePicker != null) {
+                registrationDatePicker.setValue(LocalDate.now());
+                System.out.println("Registration date picker initialized");
+            } else {
+                System.err.println("Warning: registrationDatePicker is null");
+            }
+
+            // Initialize profile image view
+            if (profileImage != null) {
+                profileImage.setFitWidth(AVATAR_SIZE);
+                profileImage.setFitHeight(AVATAR_SIZE);
+                profileImage.setPreserveRatio(false);
+
+                // Apply circular clip
+                Circle clip = new Circle(RADIUS, RADIUS, RADIUS);
+                profileImage.setClip(clip);
+                System.out.println("Profile image view initialized");
+            } else {
+                System.err.println("Warning: profileImage is null");
+            }
+
+            // Verify other critical fields
+            verifyFieldInitialization();
+
         } catch (Exception e) {
-            System.err.println("Error initializing UserService: " + e.getMessage());
+            System.err.println("Error in initialize: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Database Error",
-                    "Failed to connect to the database. Please contact support.");
+            showAlert(Alert.AlertType.ERROR, "Initialization Error",
+                    "Failed to initialize some components. Please contact support.");
         }
+    }
 
-        // Set ImageView to fixed square for circle
-        if (profileImage != null) {
-            profileImage.setFitWidth(AVATAR_SIZE);
-            profileImage.setFitHeight(AVATAR_SIZE);
-            profileImage.setPreserveRatio(false);
+    private void verifyFieldInitialization() {
+        StringBuilder uninitializedFields = new StringBuilder();
 
-            // Apply initial circular clip
-            Circle clip = new Circle(RADIUS, RADIUS, RADIUS);
-            profileImage.setClip(clip);
-        }
+        // Check text fields
+        if (firstNameField == null) uninitializedFields.append("firstNameField, ");
+        if (lastNameField == null) uninitializedFields.append("lastNameField, ");
+        if (emailField == null) uninitializedFields.append("emailField, ");
+        if (phoneField == null) uninitializedFields.append("phoneField, ");
+        if (addressField == null) uninitializedFields.append("addressField, ");
+        if (cityField == null) uninitializedFields.append("cityField, ");
+        if (postalCodeField == null) uninitializedFields.append("postalCodeField, ");
+        if (password == null) uninitializedFields.append("password, ");
+        if (confirmPassword == null) uninitializedFields.append("confirmPassword, ");
 
-        // Initialize roleFilter safely
-        if (roleFilter != null) {
-            roleFilter.setItems(FXCollections.observableArrayList("Tous","Administrateur","utilisateur"));
-            roleFilter.setValue("Tous");
-        }
+        // Check other components
+        if (biographyArea == null) uninitializedFields.append("biographyArea, ");
+        if (changePhotoButton == null) uninitializedFields.append("changePhotoButton, ");
 
-        // Initialize comboboxes
-        if (roleComboBox != null) {
-            roleComboBox.setItems(FXCollections.observableArrayList("Administrateur","utilisateur"));
+        if (uninitializedFields.length() > 0) {
+            String fields = uninitializedFields.substring(0, uninitializedFields.length() - 2);
+            System.err.println("Warning: The following fields are not initialized: " + fields);
+        } else {
+            System.out.println("All fields are properly initialized");
         }
-        if (typeComboBox != null) {
-            typeComboBox.setItems(FXCollections.observableArrayList( "Acheteur", "Agriculteur", "Grossiste"));
-        }
-        if (statusComboBox != null) {
-            statusComboBox.setItems(FXCollections.observableArrayList("Actif", "Inactif", "En attente", "Suspendu"));
-        }
-
-        // Set current date as default
-        if (registrationDatePicker != null) {
-            registrationDatePicker.setValue(LocalDate.now());
-        }
-
     }
 
     @FXML
@@ -308,7 +348,7 @@ public class ModifyPersonalDetailsController implements Initializable {
 
                 showAlert(Alert.AlertType.INFORMATION, "Success", "User updated successfully.");
 
-                // Navigate back to user management
+                // Navigate back to dashboard
                 navigateToDashboard();
 
             } catch (Exception e) {
@@ -417,7 +457,7 @@ public class ModifyPersonalDetailsController implements Initializable {
         return isValid;
     }
 
-    @FXML private void navigateToDashboard() { loadView("Dashborad"); }
+    @FXML private void navigateToDashboard() { loadView("Dashboard"); }
 
     @FXML private void navigateToUsers()     { loadView("UserManagement"); }
     @FXML private void navigateToProducts()  { loadView("Products"); }

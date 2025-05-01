@@ -20,17 +20,33 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import models.User;
 import services.UserService;
 import services.UserServiceImpl;
 import utils.SessionManager;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import javax.imageio.ImageIO;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.time.format.DateTimeFormatter;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import java.awt.Desktop;
 
 public class UserManagementController implements Initializable {
     @FXML private Label adminEmailLabel;
 
     @FXML
     private Button dashboardBtn;
+
+    @FXML
+    private Button forumBtn;
 
     @FXML
     private Button usersBtn;
@@ -101,9 +117,20 @@ public class UserManagementController implements Initializable {
     @FXML
     private ComboBox<Integer> pageSize;
 
+    @FXML
+    private Button prevPage;
+
+    @FXML
+    private Button nextPage;
+
+    @FXML
+    private Label paginationText;
+
     private UserService userService;
     private ObservableList<User> allUsers = FXCollections.observableArrayList();
     private ObservableList<User> filteredUsers = FXCollections.observableArrayList();
+    private int currentPage = 1;
+    private ObservableList<User> currentPageUsers = FXCollections.observableArrayList();
     // Display current admin name and email
 
     @Override
@@ -255,6 +282,7 @@ public class UserManagementController implements Initializable {
 
     private void applyFilters() {
         filteredUsers.clear();
+        currentPage = 1; // Reset to first page when filters change
 
         String roleVal = roleFilter.getValue();
         String statusVal = statusFilter.getValue();
@@ -295,16 +323,43 @@ public class UserManagementController implements Initializable {
             }
         }
 
-        usersTable.setItems(filteredUsers);
-
-
-        // Apply pagination if needed
+        // Apply pagination
         applyPagination();
     }
 
     private void applyPagination() {
-        // This would implement pagination logic based on the pageSize value
-        // For simplicity, we're just showing all filtered results for now
+        int pageSize = this.pageSize.getValue();
+        int totalItems = filteredUsers.size();
+        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+        
+        // Ensure current page is within bounds
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+        
+        // Calculate start and end indices for current page
+        int fromIndex = (currentPage - 1) * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, totalItems);
+        
+        // Update the table with current page items
+        currentPageUsers.clear();
+        if (totalItems > 0) {
+            currentPageUsers.addAll(filteredUsers.subList(fromIndex, toIndex));
+        }
+        usersTable.setItems(currentPageUsers);
+        
+        // Update pagination controls
+        prevPage.setDisable(currentPage == 1);
+        nextPage.setDisable(currentPage >= totalPages || totalPages == 0);
+        
+        // Update pagination text
+        String paginationInfo;
+        if (totalItems == 0) {
+            paginationInfo = "Aucun utilisateur trouvé";
+        } else {
+            paginationInfo = String.format("Affichage de %d à %d sur %d utilisateurs", 
+                fromIndex + 1, toIndex, totalItems);
+        }
+        paginationText.setText(paginationInfo);
     }
 
     @FXML
@@ -317,6 +372,8 @@ public class UserManagementController implements Initializable {
 
                 if (clickedButton == dashboardBtn) {
                     viewName = "Dashboard";
+                } else if (clickedButton == forumBtn) {
+                    viewName = "Forum";
                 } else if (clickedButton == usersBtn) {
                     viewName = "UserManagement";
                 } else if (clickedButton == productsBtn) {
@@ -526,8 +583,109 @@ public class UserManagementController implements Initializable {
 
     @FXML
     private void handleExport(ActionEvent event) {
-        System.out.println("Exporting user data");
+        try {
+            // Create dialog to choose export type
+            Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+            dialog.setTitle("Type d'export");
+            dialog.setHeaderText("Choisissez le type d'export");
+            dialog.setContentText("Quel type de liste souhaitez-vous exporter ?");
 
+            ButtonType detailedButton = new ButtonType("Liste détaillée");
+            ButtonType simplifiedButton = new ButtonType("Liste simplifiée");
+            ButtonType cancelButton = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            dialog.getButtonTypes().setAll(detailedButton, simplifiedButton, cancelButton);
+
+            dialog.showAndWait().ifPresent(response -> {
+                if (response != cancelButton) {
+                    boolean isDetailed = (response == detailedButton);
+                    exportUserList(event, isDetailed);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur", 
+                     "Une erreur est survenue lors de l'export:\n" + e.getMessage());
+        }
+    }
+
+    private void exportUserList(ActionEvent event, boolean isDetailed) {
+        try {
+            // Create file chooser
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Enregistrer le fichier");
+            fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichiers texte (*.txt)", "*.txt")
+            );
+            
+            // Show save file dialog
+            File file = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
+            
+            if (file != null) {
+                try (FileOutputStream output = new FileOutputStream(file)) {
+                    StringBuilder content = new StringBuilder();
+                    
+                    // Add title
+                    content.append("Liste des Utilisateurs - AgriLink\n");
+                    content.append("Date d'export: ").append(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).append("\n\n");
+                    
+                    if (isDetailed) {
+                        // Detailed export
+                        for (User user : filteredUsers) {
+                            content.append("=".repeat(80)).append("\n");
+                            content.append("Informations détaillées de l'utilisateur\n");
+                            content.append("-".repeat(40)).append("\n");
+                            content.append(String.format("ID: %d\n", user.getId()));
+                            content.append(String.format("Nom complet: %s %s\n", user.getFirstName(), user.getLastName()));
+                            content.append(String.format("Email: %s\n", user.getEmail()));
+                            content.append(String.format("Rôle: %s\n", user.getRole()));
+                            content.append(String.format("Type: %s\n", user.getType()));
+                            content.append(String.format("Statut: %s\n", user.getStatus()));
+                            content.append(String.format("Date d'inscription: %s\n", user.getRegistrationDateString()));
+                            content.append(String.format("Date de naissance: %s\n", user.getBirthDateString()));
+                            content.append(String.format("Téléphone: %s\n", user.getPhone() != null ? user.getPhone() : "N/A"));
+                            content.append(String.format("Adresse: %s\n", user.getAddress() != null ? user.getAddress() : "N/A"));
+                            content.append(String.format("Ville: %s\n", user.getCity() != null ? user.getCity() : "N/A"));
+                            content.append(String.format("Code postal: %s\n", user.getPostalCode() != null ? user.getPostalCode() : "N/A"));
+                            content.append(String.format("Biographie: %s\n", user.getBiography() != null ? user.getBiography() : "N/A"));
+                            content.append("\n");
+                        }
+                    } else {
+                        // Simplified export (current format)
+                        content.append(String.format("%-30s %-40s %-15s %-15s %-15s %-20s\n",
+                            "Nom", "Email", "Rôle", "Type", "Statut", "Date d'inscription"));
+                        content.append("-".repeat(135)).append("\n");
+                        
+                        for (User user : filteredUsers) {
+                            String name = user.getFirstName() + " " + user.getLastName();
+                            
+                            content.append(String.format("%-30s %-40s %-15s %-15s %-15s %-20s\n",
+                                name,
+                                user.getEmail(),
+                                user.getRole(),
+                                user.getType(),
+                                user.getStatus(),
+                                user.getRegistrationDateString()));
+                        }
+                    }
+                    
+                    // Write content to file
+                    output.write(content.toString().getBytes());
+                    
+                    showAlert(Alert.AlertType.INFORMATION, "Export réussi", 
+                             "Le fichier a été créé avec succès à l'emplacement:\n" + file.getAbsolutePath());
+                    
+                    // Open the file
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(file);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur d'export", 
+                     "Une erreur est survenue lors de l'export du fichier:\n" + e.getMessage());
+        }
     }
 
     @FXML
@@ -554,16 +712,14 @@ public class UserManagementController implements Initializable {
 
     @FXML
     private void handlePagination(ActionEvent event) {
-        if (event.getSource() instanceof Button) {
-            Button button = (Button) event.getSource();
-            if (button.getText().equals("<")) {
-                System.out.println("Previous page");
-                // Implement previous page logic
-            } else {
-                System.out.println("Next page");
-                // Implement next page logic
-            }
+        if (event.getSource() == prevPage && currentPage > 1) {
+            currentPage--;
+        } else if (event.getSource() == nextPage) {
+            currentPage++;
+        } else if (event.getSource() == pageSize) {
+            currentPage = 1; // Reset to first page when page size changes
         }
+        applyPagination();
     }
 
     public void navigateToUserProfile(ActionEvent actionEvent) {

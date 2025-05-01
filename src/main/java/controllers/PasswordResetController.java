@@ -9,6 +9,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import services.EmailService;
+import services.UserService;
+import services.UserServiceImpl;
+import services.GoogleAuthService;
 
 public class PasswordResetController implements Initializable {
 
@@ -21,26 +27,43 @@ public class PasswordResetController implements Initializable {
     @FXML
     private Button backButton;
 
+    private UserService userService;
+    private EmailService emailService;
+    private GoogleAuthService googleAuthService;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Initialize any components if needed
+        userService = new UserServiceImpl();
+        emailService = new EmailService();
+        googleAuthService = new GoogleAuthService();
     }
 
     @FXML
     private void handleSendResetLink(ActionEvent event) {
-        // Implement password reset logic here
         String email = emailField.getText().trim();
 
         if (email.isEmpty()) {
-            System.out.println("Email field cannot be empty");
+            showAlert(AlertType.ERROR, "Erreur", "Le champ email ne peut pas être vide");
             return;
         }
 
-        // In a real application, you would send a reset link to the email
-        System.out.println("Password reset link sent to: " + email);
+        // Check if email exists in the database
+        if (userService.findByEmail(email) == null) {
+            showAlert(AlertType.ERROR, "Erreur", "Aucun compte n'est associé à cet email");
+            return;
+        }
 
-        // Navigate to the email sent confirmation page
+        // Generate a new random password
+        String newPassword = googleAuthService.generateRandomPassword();
+
         try {
+            // Update the user's password in the database
+            userService.updatePassword(email, newPassword);
+            
+            // Send the new password via email
+            emailService.sendPasswordResetEmail(email, newPassword);
+
+            // Navigate to the email sent confirmation page
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/EmailSent.fxml"));
             Parent root = loader.load();
 
@@ -51,8 +74,17 @@ public class PasswordResetController implements Initializable {
             // Replace scene content
             emailField.getScene().setRoot(root);
         } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Erreur", "Une erreur est survenue lors de la réinitialisation du mot de passe");
             e.printStackTrace();
         }
+    }
+
+    private void showAlert(AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     @FXML
@@ -67,6 +99,7 @@ public class PasswordResetController implements Initializable {
             // Replace scene content
             emailField.getScene().setRoot(root);
         } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Erreur de navigation", "Impossible de naviguer vers la connexion");
             e.printStackTrace();
         }
     }

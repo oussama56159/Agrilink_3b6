@@ -40,11 +40,11 @@
         </HBox>
 
         <!-- Navigation Buttons -->
-        <Button fx:id="dashboardBtn" onAction="#navigateToUsers" styleClass="nav-button" text="Tableau de bord" />
+        <Button fx:id="dashboardBtn" onAction="#navigateToDashboard" styleClass="nav-button" text="Tableau de bord" />
         <Button fx:id="usersBtn" onAction="#navigateToUsers" styleClass="sidebar-button, active-sidebar-button" text="Utilisateurs" />
-        <Button fx:id="productsBtn" onAction="#navigateToUsers" styleClass="nav-button" text="Produits" />
-        <Button fx:id="statisticsBtn" onAction="#navigateToUsers" styleClass="nav-button" text="Statistiques" />
-        <Button fx:id="settingsBtn" onAction="#navigateToUsers" styleClass="nav-button" text="Paramètres" />
+        <Button fx:id="productsBtn" onAction="#navigateToProducts" styleClass="nav-button" text="Produits" />
+        <Button fx:id="statisticsBtn" onAction="#navigateToStatistics" styleClass="nav-button" text="Statistiques" />
+        <Button fx:id="settingsBtn" onAction="#navigateToSettings" styleClass="nav-button" text="Paramètres" />
 
         <!-- Spacer -->
         <Region VBox.vgrow="ALWAYS" />
@@ -178,6 +178,9 @@
 
                         <Label styleClass="field-label" text="Type" />
                         <ComboBox fx:id="typeComboBox" promptText="Sélectionner un type" styleClass="combo-box" GridPane.fillWidth="true" GridPane.rowIndex="1" />
+
+                        <Label styleClass="field-label" text="Rôle" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <ComboBox fx:id="roleComboBox" promptText="Sélectionner un rôle" styleClass="combo-box" GridPane.columnIndex="1" GridPane.fillWidth="true" GridPane.rowIndex="1" />
 
                         <Label styleClass="field-label" text="Statut" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                         <ComboBox fx:id="statusComboBox" promptText="Sélectionner un statut" styleClass="combo-box" GridPane.columnIndex="0" GridPane.fillWidth="true" GridPane.rowIndex="3" />

@@ -291,4 +291,83 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public User findByEmail(String email) {
+        try {
+            String query = "SELECT * FROM users WHERE email = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setEmail(rs.getString("email"));
+                user.setRole(rs.getString("role"));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void add(User user) {
+        try {
+            String query = "INSERT INTO users (first_name, last_name, email, password, role) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setString(1, user.getFirstName());
+            stmt.setString(2, user.getLastName());
+            stmt.setString(3, user.getEmail());
+            stmt.setString(4, user.getPassword());
+            stmt.setString(5, user.getRole());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int[] getUserTypeStatistics() throws SQLException {
+        int[] stats = new int[3]; // 0: acheteur, 1: agriculteur, 2: grossiste
+        String query = "SELECT type, COUNT(*) as count FROM users GROUP BY type";
+        
+        try (PreparedStatement ps = connection.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                String type = rs.getString("type");
+                int count = rs.getInt("count");
+                
+                switch (type.toLowerCase()) {
+                    case "acheteur":
+                        stats[0] = count;
+                        break;
+                    case "agriculteur":
+                        stats[1] = count;
+                        break;
+                    case "grossiste":
+                        stats[2] = count;
+                        break;
+                }
+            }
+        }
+        return stats;
+    }
+
+    @Override
+    public void updatePassword(String email, String newPassword) throws Exception {
+        String query = "UPDATE users SET password = ? WHERE email = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, newPassword);
+            ps.setString(2, email);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new Exception("No user found with the specified email");
+            }
+        }
+    }
 }

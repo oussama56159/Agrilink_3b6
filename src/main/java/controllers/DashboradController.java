@@ -26,12 +26,18 @@ import services.UserService;
 import services.UserServiceImpl;
 import utils.SessionManager;
 
-
 public class DashboradController implements Initializable {
     @FXML
     private Button viewPf;
     @FXML
     private Label MailLabel;
+    @FXML
+    private Label acheteurCount;
+    @FXML
+    private Label agriculteurCount;
+    @FXML
+    private Label grossisteCount;
+    
     private UserService userService;
     private ObservableList<User> allUsers = FXCollections.observableArrayList();
     private ObservableList<User> filteredUsers = FXCollections.observableArrayList();
@@ -42,6 +48,7 @@ public class DashboradController implements Initializable {
         try {
             userService = new UserServiceImpl();
             System.out.println("UserService initialized successfully in UserManagementController");
+            updateUserTypeStatistics();
         } catch (Exception e) {
             System.err.println("Error initializing UserService: " + e.getMessage());
             e.printStackTrace();
@@ -49,7 +56,21 @@ public class DashboradController implements Initializable {
                     "Failed to connect to the database. Please contact support.");
         }
 
-        displayCurrentuserInfo();}
+        displayCurrentuserInfo();
+    }
+
+    private void updateUserTypeStatistics() {
+        try {
+            int[] stats = userService.getUserTypeStatistics();
+            acheteurCount.setText(String.valueOf(stats[0]));
+            agriculteurCount.setText(String.valueOf(stats[1]));
+            grossisteCount.setText(String.valueOf(stats[2]));
+        } catch (Exception e) {
+            System.err.println("Error updating user type statistics: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

@@ -14,7 +14,12 @@ import javafx.scene.control.TextField;
 import models.User;
 import services.UserService;
 import services.UserServiceImpl;
+import services.SocialAuthService;
 import utils.SessionManager;
+import javafx.scene.control.TextInputDialog;
+import java.util.Map;
+import java.util.Optional;
+import services.GoogleAuthService;
 
 public class ConnexionController implements Initializable {
 
@@ -25,10 +30,12 @@ public class ConnexionController implements Initializable {
     private PasswordField passwordField;
 
     private UserService userService;
+    private SocialAuthService socialAuthService;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         userService = new UserServiceImpl();
+        socialAuthService = new SocialAuthService();
     }
 
     @FXML
@@ -112,6 +119,34 @@ public class ConnexionController implements Initializable {
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Erreur de navigation", "Impossible de naviguer vers l'inscription: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleGoogleLogin(ActionEvent event) {
+        try {
+            GoogleAuthService googleAuthService = new GoogleAuthService();
+            User user = googleAuthService.authenticateWithGoogle();
+            
+            if (user != null) {
+                // Store user in session
+                SessionManager.getInstance().setCurrentUser(user);
+                
+                // Navigate to appropriate view based on user role
+                String role = user.getRole().toLowerCase();
+                if ("administrateur".equals(role)) {
+                    navigateToView("UserManagement");
+                } else if ("utilisateur".equals(role)) {
+                    navigateToView("Dashboard");
+                } else {
+                    showAlert(AlertType.ERROR, "Accès refusé", "Votre rôle (" + user.getRole() + ") n'est pas autorisé.");
+                }
+            } else {
+                showAlert(AlertType.ERROR, "Échec de connexion", "Impossible de se connecter avec Google.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(AlertType.ERROR, "Erreur de connexion", "Une erreur s'est produite lors de la connexion avec Google: " + e.getMessage());
         }
     }
 

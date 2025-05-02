@@ -58,7 +58,7 @@ public class UserAddController implements Initializable {
 
         roleComboBox.setItems(FXCollections.observableArrayList("Administrateur","utilisateur"));
         typeComboBox.setItems(FXCollections.observableArrayList("Acheteur","Agriculteur","Grossiste"));
-        statusComboBox.setItems(FXCollections.observableArrayList("Actif","Inactif","En attente","Suspendu"));
+        statusComboBox.setItems(FXCollections.observableArrayList("Actif","Bloqué"));
 
         registrationDatePicker.setValue(LocalDate.now());
     }

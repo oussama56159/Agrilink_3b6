@@ -110,7 +110,7 @@ public class ModifyPersonalDetailsController implements Initializable {
             }
 
             if (statusComboBox != null) {
-                statusComboBox.setItems(FXCollections.observableArrayList("Actif", "Inactif", "En attente", "Suspendu"));
+                statusComboBox.setItems(FXCollections.observableArrayList("Actif", "Bloqué"));
                 System.out.println("Status ComboBox initialized");
             } else {
                 System.err.println("Warning: statusComboBox is null");

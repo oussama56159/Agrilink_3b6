@@ -125,7 +125,7 @@ public class UserModifyController implements Initializable {
             typeComboBox.setItems(FXCollections.observableArrayList( "Acheteur", "Agriculteur", "Grossiste"));
         }
         if (statusComboBox != null) {
-            statusComboBox.setItems(FXCollections.observableArrayList("Actif", "Inactif", "En attente", "Suspendu"));
+            statusComboBox.setItems(FXCollections.observableArrayList("Actif", "Bloqué", "Suspendu"));
         }
 
         // Set current date as default

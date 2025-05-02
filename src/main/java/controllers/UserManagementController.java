@@ -154,7 +154,7 @@ public class UserManagementController implements Initializable {
         }
 
         if (statusFilter != null) {
-            statusFilter.setItems(FXCollections.observableArrayList("Tous les statuts", "Actif", "En attente", "Inactif"));
+            statusFilter.setItems(FXCollections.observableArrayList("Tous les statuts", "Actif","Bloqué"));
             statusFilter.setValue("Tous les statuts");
             statusFilter.setOnAction(event -> applyFilters());
         }

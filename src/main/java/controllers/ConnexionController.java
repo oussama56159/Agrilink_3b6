@@ -52,6 +52,12 @@ public class ConnexionController implements Initializable {
             User user = userService.login(email, password);
 
             if (user != null) {
+                // Check if user is blocked
+                if ("bloqué".equalsIgnoreCase(user.getStatus())) {
+                    showAlert(AlertType.ERROR, "Accès refusé", "Votre compte est bloqué. Veuillez contacter l'administrateur.");
+                    return;
+                }
+
                 // Store user in session
                 SessionManager.getInstance().setCurrentUser(user);
                 System.out.println("Login successful for: " + user.getFirstName() + " " + user.getLastName());
@@ -127,11 +133,17 @@ public class ConnexionController implements Initializable {
         try {
             GoogleAuthService googleAuthService = new GoogleAuthService();
             User user = googleAuthService.authenticateWithGoogle();
-            
+
             if (user != null) {
+                // Check if user is blocked
+                if ("bloqué".equalsIgnoreCase(user.getStatus())) {
+                    showAlert(AlertType.ERROR, "Accès refusé", "Votre compte est bloqué. Veuillez contacter l'administrateur.");
+                    return;
+                }
+
                 // Store user in session
                 SessionManager.getInstance().setCurrentUser(user);
-                
+
                 // Navigate to appropriate view based on user role
                 String role = user.getRole().toLowerCase();
                 if ("administrateur".equals(role)) {

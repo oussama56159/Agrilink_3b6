@@ -233,8 +233,8 @@
 }
 
 .status-inactive {
-    -fx-background-color: #f5f5f5;
-    -fx-text-fill: #666666;
+    -fx-background-color: #f7e6e6;
+    -fx-text-fill: #ea4a4a;
     -fx-background-radius: 15px;
     -fx-padding: 5px 10px;
 }

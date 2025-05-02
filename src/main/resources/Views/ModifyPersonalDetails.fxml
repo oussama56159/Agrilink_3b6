@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ModifyPersonalDetailsController">
+<HBox HBox.hgrow="ALWAYS" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ModifyPersonalDetailsController">
     <stylesheets>
         <URL value="@/styles/UserAdd.css" />
     </stylesheets>
@@ -70,7 +70,7 @@
             <!-- Header with back button aligned right -->
             <HBox alignment="CENTER_LEFT" styleClass="header">
                 <VBox styleClass="title-container" HBox.hgrow="ALWAYS">
-                    <Label styleClass="title" text="Modifer les information d'un utilisateur" />
+                    <Label styleClass="title" text="Modifier vos informations personnelles" />
                     <Label styleClass="subtitle" text="Créer un nouveau compte utilisateur" />
                 </VBox>
                 <Button onAction="#handleCancel" prefWidth="85.0" styleClass="cancel-button" text="← Retour">

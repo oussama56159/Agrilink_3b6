@@ -299,7 +299,7 @@ public class UserServiceImpl implements UserService {
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 User user = new User();
                 user.setId(rs.getInt("id"));
@@ -307,6 +307,10 @@ public class UserServiceImpl implements UserService {
                 user.setLastName(rs.getString("last_name"));
                 user.setEmail(rs.getString("email"));
                 user.setRole(rs.getString("role"));
+                user.setType(rs.getString("type"));
+                user.setStatus(rs.getString("status")); // <-- Add this line!
+                user.setRegistrationDate(rs.getObject("registration_date", java.time.LocalDate.class));
+                // Set other fields as needed
                 return user;
             }
         } catch (SQLException e) {

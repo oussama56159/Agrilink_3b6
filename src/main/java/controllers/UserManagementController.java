@@ -214,7 +214,7 @@ public class UserManagementController implements Initializable {
                                     getStyleClass().add("status-active");
                                 } else if (item.equalsIgnoreCase("En attente")) {
                                     getStyleClass().add("status-pending");
-                                } else if (item.equalsIgnoreCase("Inactif")) {
+                                } else if (item.equalsIgnoreCase("Bloqué")) {
                                     getStyleClass().add("status-inactive");
                                 }
                             }
@@ -467,6 +467,7 @@ public class UserManagementController implements Initializable {
         MenuItem editItem = new MenuItem("Modifier");
         MenuItem deleteItem = new MenuItem("Supprimer");
         MenuItem profileItem = new MenuItem("profile");
+        MenuItem bloquerItem = new MenuItem("Bloquer");
         editItem.setOnAction(event -> {
             try {
                 // Get the scene from the button
@@ -571,8 +572,40 @@ public class UserManagementController implements Initializable {
         }
 
         });
+        bloquerItem.setOnAction(e -> {
+            // Check if user is an Administrator
+            if ("Administrateur".equals(user.getRole())) {
+                showAlert(Alert.AlertType.WARNING, "Action non autorisée", "Les utilisateurs avec le rôle Administrateur ne peuvent pas être bloqués.");
+                return;
+            }
+            // Check if user is already blocked
+            if ("Bloqué".equals(user.getStatus())) {
+                // Unblock the user
+                user.setStatus("Actif");
+                try {
+                    userService.update(user);
+                    showAlert(Alert.AlertType.INFORMATION, "Utilisateur débloqué", "L'utilisateur a été débloqué avec succès.");
+                } catch (Exception ex) {
+                    System.err.println("Error unblocking user: " + ex.getMessage());
+                    ex.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de débloquer l'utilisateur: " + ex.getMessage());
+                }
+            } else {
+                // Block the user
+                user.setStatus("Bloqué");
+                try {
+                    userService.update(user);
+                    showAlert(Alert.AlertType.INFORMATION, "Utilisateur bloqué", "L'utilisateur a été bloqué avec succès.");
+                } catch (Exception ex) {
+                    System.err.println("Error blocking user: " + ex.getMessage());
+                    ex.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de bloquer l'utilisateur: " + ex.getMessage());
+                }
+            }
+            refreshUserList();
+        });
 
-        contextMenu.getItems().addAll(editItem, deleteItem,profileItem);
+        contextMenu.getItems().addAll(editItem, deleteItem,profileItem, bloquerItem);
         contextMenu.show(button, javafx.geometry.Side.BOTTOM, 0, 0);
     }
 

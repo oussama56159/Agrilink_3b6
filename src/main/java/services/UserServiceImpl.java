@@ -60,6 +60,9 @@ public class UserServiceImpl implements UserService {
             throw new Exception("A user with this email already exists");
         }
 
+        // Hash the password before storing it
+        String hashedPassword = utils.PasswordHasher.hashPassword(user.getPassword());
+
         // Build the SQL query dynamically based on available columns
         StringBuilder queryBuilder = new StringBuilder("INSERT INTO users (");
         StringBuilder valuesBuilder = new StringBuilder("VALUES (");
@@ -106,7 +109,7 @@ public class UserServiceImpl implements UserService {
             ps.setString(paramIndex++, user.getFirstName());
             ps.setString(paramIndex++, user.getLastName());
             ps.setString(paramIndex++, user.getEmail());
-            ps.setString(paramIndex++, user.getPassword());
+            ps.setString(paramIndex++, hashedPassword); // Store the hashed password
             ps.setString(paramIndex++, user.getRole());
             ps.setString(paramIndex++, user.getType());
             ps.setString(paramIndex++, user.getStatus());
@@ -169,11 +172,18 @@ public class UserServiceImpl implements UserService {
         String query = queryBuilder.toString();
         System.out.println("Executing update SQL: " + query);
 
+        // Check if the password needs to be hashed
+        String passwordToStore = user.getPassword();
+        if (passwordToStore != null && !passwordToStore.isEmpty() && !utils.PasswordHasher.isPasswordHashed(passwordToStore)) {
+            // Hash the password before storing it
+            passwordToStore = utils.PasswordHasher.hashPassword(passwordToStore);
+        }
+
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             int paramIndex = 1;
             ps.setString(paramIndex++, user.getFirstName());
             ps.setString(paramIndex++, user.getLastName());
-            ps.setString(paramIndex++, user.getPassword());
+            ps.setString(paramIndex++, passwordToStore); // Store the hashed password
             ps.setString(paramIndex++, user.getRole());
             ps.setString(paramIndex++, user.getType());
             ps.setString(paramIndex++, user.getStatus());
@@ -285,7 +295,29 @@ public class UserServiceImpl implements UserService {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String storedPassword = rs.getString("password");
-                    return storedPassword.equals(password);
+                    
+                    // Check if the stored password is already hashed
+                    if (utils.PasswordHasher.isPasswordHashed(storedPassword)) {
+                        // Verify using BCrypt
+                        return utils.PasswordHasher.verifyPassword(password, storedPassword);
+                    } else {
+                        // Legacy verification for non-hashed passwords (for backward compatibility)
+                        // This allows existing users to still log in
+                        boolean matches = storedPassword.equals(password);
+                        
+                        // If the password matches, we can upgrade it to a hashed version
+                        if (matches) {
+                            try {
+                                // Hash the password and update it in the database
+                                String hashedPassword = utils.PasswordHasher.hashPassword(password);
+                                updatePassword(email, hashedPassword);
+                                System.out.println("Password upgraded to hashed version for user: " + email);
+                            } catch (Exception e) {
+                                System.err.println("Failed to upgrade password: " + e.getMessage());
+                            }
+                        }
+                        return matches;
+                    }
                 }
             }
         }
@@ -364,9 +396,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePassword(String email, String newPassword) throws Exception {
+        // Check if the password is already hashed
+        String hashedPassword;
+        if (utils.PasswordHasher.isPasswordHashed(newPassword)) {
+            // Password is already hashed (this happens when we're upgrading passwords internally)
+            hashedPassword = newPassword;
+        } else {
+            // Hash the new password before storing it
+            hashedPassword = utils.PasswordHasher.hashPassword(newPassword);
+        }
+        
         String query = "UPDATE users SET password = ? WHERE email = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, newPassword);
+            ps.setString(1, hashedPassword);
             ps.setString(2, email);
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 0) {

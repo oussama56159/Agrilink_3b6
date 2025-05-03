@@ -125,7 +125,7 @@ public class UserModifyController implements Initializable {
             typeComboBox.setItems(FXCollections.observableArrayList( "Acheteur", "Agriculteur", "Grossiste"));
         }
         if (statusComboBox != null) {
-            statusComboBox.setItems(FXCollections.observableArrayList("Actif", "Inactif", "En attente", "Suspendu"));
+            statusComboBox.setItems(FXCollections.observableArrayList("Actif", "Bloqué", "Suspendu"));
         }
 
         // Set current date as default
@@ -289,16 +289,23 @@ public class UserModifyController implements Initializable {
                     currentUser.setBiography(""); // Set empty string if field is null
                 }
 
-                if (password != null && password.getText() != null) {
-                    currentUser.setPassword(password.getText().trim());
-                } else {
-                    currentUser.setPassword(""); // Set empty string if field is null
+                // Only update password if a new one is provided
+                if (password != null && password.getText() != null && !password.getText().trim().isEmpty()) {
+                    String newPassword = password.getText().trim();
+                    String confirmPwd = confirmPassword != null ? confirmPassword.getText().trim() : "";
+                    
+                    // Verify that passwords match
+                    if (newPassword.equals(confirmPwd)) {
+                        // Password will be hashed in the UserServiceImpl.update method
+                        // The update method checks if the password is already hashed
+                        currentUser.setPassword(newPassword);
+                    } else {
+                        // Show error if passwords don't match
+                        showAlert(Alert.AlertType.ERROR, "Erreur de validation", "Les mots de passe ne correspondent pas.");
+                        return; // Stop the save process if passwords don't match
+                    }
                 }
-                if (confirmPassword != null && confirmPassword.getText() != null) {
-                    currentUser.setPassword(confirmPassword.getText().trim());
-                } else {
-                    currentUser.setPassword(""); // Set empty string if field is null
-                }
+                // Note: We don't set an empty password if none is provided, to preserve the existing password
 
                 currentUser.setProfileImagePath(profileImagePath);
 
@@ -520,10 +527,10 @@ public class UserModifyController implements Initializable {
             biographyArea.setText(user.getBiography());
         }
         if (password != null) {
-            password.setText(user.getPassword());
+            password.setText("");
         }
         if (confirmPassword != null) {
-            confirmPassword.setText(user.getPassword());
+            confirmPassword.setText("");
         }
 
         if (profileImage != null && user.getProfileImagePath() != null && !user.getProfileImagePath().isEmpty()) {

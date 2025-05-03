@@ -94,6 +94,13 @@
       <version>${javafx.version}</version>
     </dependency>
 
+    <!-- Password hashing library -->
+    <dependency>
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>0.4</version>
+    </dependency>
+
     <!-- your other UI libraries -->
     <dependency>
       <groupId>org.controlsfx</groupId>

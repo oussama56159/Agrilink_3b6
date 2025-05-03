@@ -215,14 +215,14 @@ public class InscriptionController implements Initializable {
 
             // Create a new User object with the form data
             User newUser = new User(
-                    firstNameField.getText(),
-                    lastNameField.getText(),
-                    emailField.getText(),
-                    passwordField.getText(), // Include password
+                    firstNameField.getText().trim(),
+                    lastNameField.getText().trim(),
+                    emailField.getText().trim(),
+                    passwordField.getText().trim(), // Password will be hashed in UserServiceImpl.Create method
                     "utilisateur", // default role
-                    "Acheteur", // default type
+                    userTypeComboBox.getValue(),
                     "Actif", // default status
-                    LocalDate.now()
+                    LocalDate.now() // Registration date
             );
 
             // Set additional user properties

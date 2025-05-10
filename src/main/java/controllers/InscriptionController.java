@@ -305,36 +305,36 @@ public class InscriptionController implements Initializable {
         // 1) First Name
         String firstName = firstNameField.getText().trim();
         if (firstName.isEmpty()) {
-            errors.append("First name is required\n");
+            errors.append("Le prénom est requis\n");
         } else if (!namePattern.matcher(firstName).matches()) {
-            errors.append("First name must be 2–50 letters and may include hyphens/apostrophes\n");
+            errors.append("Le prénom doit comporter entre 2 et 50 lettres et peut inclure des tirets ou des apostrophes\n");
         }
 
         // 2) Last Name
         String lastName = lastNameField.getText().trim();
         if (lastName.isEmpty()) {
-            errors.append("Last name is required\n");
+            errors.append("Le nom est requis\n");
         } else if (!namePattern.matcher(lastName).matches()) {
-            errors.append("Last name must be 2–50 letters and may include hyphens/apostrophes\n");
+            errors.append("Le nom doit comporter entre 2 et 50 lettres et peut inclure des tirets ou des apostrophes\n");
         }
 
         // 3) Email
         String email = emailField.getText().trim();
         if (email.isEmpty()) {
-            errors.append("Email is required\n");
+            errors.append("L'adresse e-mail est requise\n");
         } else if (!emailPattern.matcher(email).matches()) {
-            errors.append("Invalid email format\n");
+            errors.append("Format d'e-mail invalide\n");
         }
 
         // 4) Password + confirmation
         String pwd = passwordField.getText();
         String confirm = confirmPasswordField.getText();
         if (pwd.isEmpty()) {
-            errors.append("Password is required\n");
+            errors.append("Le mot de passe est requis\n");
         } else {
             // length check
             if (pwd.length() < 8) {
-                errors.append("Password must be at least 8 characters\n");
+                errors.append("Le mot de passe doit comporter au moins 8 caractères\n");
             }
             // complexity: count character classes
             int classes = 0;
@@ -343,17 +343,17 @@ public class InscriptionController implements Initializable {
             if (pwd.matches(".*\\d.*"))    classes++;
             if (pwd.matches(".*[^A-Za-z0-9].*")) classes++;
             if (classes < 3) {
-                errors.append("Password must include at least three of: uppercase, lowercase, digit, special character\n");
+                errors.append("Le mot de passe doit inclure au moins trois des éléments suivants : majuscule, minuscule, chiffre, caractère spécial\n");
             }
             // match check
             if (!pwd.equals(confirm)) {
-                errors.append("Passwords do not match\n");
+                errors.append("Les mots de passe ne correspondent pas\n");
             }
         }
 
         // 5) Terms & Conditions
         if (termsCheckBox != null && !termsCheckBox.isSelected()) {
-            errors.append("You must accept the terms and conditions\n");
+            errors.append("Vous devez accepter les termes et conditions\n");
         }
 
         // Finalize
@@ -363,6 +363,7 @@ public class InscriptionController implements Initializable {
         }
         return true;
     }
+
 
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {

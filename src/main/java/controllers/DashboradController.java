@@ -37,7 +37,27 @@ public class DashboradController implements Initializable {
     private Label agriculteurCount;
     @FXML
     private Label grossisteCount;
-    
+    @FXML
+    private Button dashboardBtn;
+
+    @FXML
+    private Button forumBtn;
+
+    @FXML
+    private Button usersBtn;
+
+    @FXML
+    private Button productsBtn;
+
+    @FXML
+    private Button fournisseur;
+
+    @FXML
+    private Button commande;
+    @FXML
+    private Button adminBtn;
+    @FXML private Label adminEmailLabel;
+
     private UserService userService;
     private ObservableList<User> allUsers = FXCollections.observableArrayList();
     private ObservableList<User> filteredUsers = FXCollections.observableArrayList();
@@ -56,7 +76,7 @@ public class DashboradController implements Initializable {
                     "Failed to connect to the database. Please contact support.");
         }
 
-        displayCurrentuserInfo();
+
     }
 
     private void updateUserTypeStatistics() {
@@ -69,6 +89,7 @@ public class DashboradController implements Initializable {
             System.err.println("Error updating user type statistics: " + e.getMessage());
             e.printStackTrace();
         }
+        displayCurrentUserInfo();
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {
@@ -130,4 +151,56 @@ public class DashboradController implements Initializable {
             MailLabel.setText(current.getEmail());
         }
     }
+    @FXML
+    private void handleNavigation(ActionEvent event) {
+        if (event.getSource() instanceof Button) {
+            Button clickedButton = (Button) event.getSource();
+
+            try {
+                String viewName = "";
+
+                if (clickedButton == dashboardBtn) {
+                    viewName = "Dashboard";
+                } else if (clickedButton == forumBtn) {
+                    viewName = "Forum";
+                } else if (clickedButton == usersBtn) {
+                    viewName = "UserManagement";
+                } else if (clickedButton == productsBtn) {
+                    viewName = "Products";
+                } else if (clickedButton ==fournisseur ) {
+                    viewName = "Statistics";
+                } else if (clickedButton == commande) {
+                    viewName = "Settings";
+                }
+
+                if (!viewName.isEmpty()) {
+                    // Get the current scene from the event source
+                    Scene currentScene = ((Node) event.getSource()).getScene();
+                    if (currentScene != null) {
+                        // Load the view through MainController
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Main.fxml"));
+                        Parent root = loader.load();
+                        MainController mainController = loader.getController();
+                        mainController.loadView(viewName);
+
+                        // Replace scene content
+                        currentScene.setRoot(root);
+                    } else {
+                        System.out.println("Error: Current scene is null");
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error navigating to view: " + e.getMessage());
+            }
+        }
+    }
+    private void  displayCurrentUserInfo() {
+        User current = SessionManager.getInstance().getCurrentUser();
+        if (current != null) {
+            adminBtn.setText(current.getFirstName() + " " + current.getLastName());
+            adminEmailLabel.setText(current.getEmail());
+        }
+    }
+
 }

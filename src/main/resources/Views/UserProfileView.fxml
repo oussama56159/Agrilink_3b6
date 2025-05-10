@@ -18,6 +18,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.SVGPath?>
 
+<?import javafx.geometry.Insets?>
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" styleClass="main-container" stylesheets="@/styles/UserProfile.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserProfileController">
 
     <!-- Main Content Container -->
@@ -25,39 +26,39 @@
 
         <!-- Left Sidebar -->
         <left>
-            <VBox styleClass="sidebar">
-                <!-- Logo -->
-                <HBox styleClass="logo-container">
-                    <ImageView fitHeight="30" fitWidth="30" preserveRatio="true">
-                        <Image url="@/imgs/logo.png" />
+            <VBox prefWidth="200" styleClass="sidebar">
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="logo-container">
+                    <padding>
+                        <Insets bottom="15" left="15" right="15" top="15" />
+                    </padding>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@/imgs/logo.png" />
+                        </image>
                     </ImageView>
                     <Label styleClass="logo-text" text="AgriLink" />
                 </HBox>
 
-                <!-- Main Navigation -->
-                <VBox styleClass="nav-section">
-                    <Button fx:id="dashboardBtn" onAction="#handleNavigation" styleClass="nav-button" text="Tableau de bord" />
+                <Button fx:id="dashboardBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Tableau de bord" />
+                <Button fx:id="forumBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Forum" />
+                <Button fx:id="eventsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Événements" />
+                <Button fx:id="usersBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Utilisateurs" />
+                <Button fx:id="productsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Produits" />
+                <Button fx:id="fournisseur" onAction="#handleNavigation" styleClass="sidebar-button" text="fournisseur" />
+                <Button fx:id="commande" onAction="#handleNavigation" styleClass="sidebar-button" text="commande" />
 
-                    <Button fx:id="usersBtn" onAction="#handleNavigation" styleClass="nav-button" text="Utilisateurs" />
+                <Region VBox.vgrow="ALWAYS" />
 
-                    <Button fx:id="productsBtn" onAction="#handleNavigation" styleClass="nav-button" text="Produits" />
+                <Button fx:id="logoutBtn" onAction="#handleLogout" styleClass="sidebar-button, logout-button" text="Déconnexion" />
+                <Button fx:id="adminBtn"  prefHeight="25.0" prefWidth="87.0" styleClass="sidebar-button, active-sidebar-button, admin-button" text="Admin" />
 
-                    <Button fx:id="statisticsBtn" onAction="#handleNavigation" styleClass="nav-button" text="Statistiques" />
-
-                    <Button fx:id="settingsBtn" onAction="#handleNavigation" styleClass="nav-button" text="Paramètres" />
-                </VBox>
-
-                <!-- Spacer to push logout and user info to bottom -->
-                <Region styleClass="sidebar-spacer" VBox.vgrow="ALWAYS" />
-
-                <!-- Logout Button -->
-                <Button fx:id="logoutBtn" onAction="#handleLogout" styleClass="nav-button" text="Déconnexion" />
-
-                <!-- User Info -->
-                <VBox styleClass="user-info">
-                    <Label fx:id="sidebarUserName" styleClass="sidebar-username" text="Admin" />
-                    <Label fx:id="sidebarUserEmail" styleClass="sidebar-email" text="admin@agrilink.com" />
-                </VBox>
+                <HBox alignment="CENTER_LEFT" spacing="5" styleClass="admin-section">
+                    <padding>
+                        <Insets bottom="15" left="15" right="15" top="15" />
+                    </padding>
+                    <Label fx:id="adminEmailLabel" styleClass="admin-email" text="admin@agrilink.com" />
+                    <VBox />
+                </HBox>
             </VBox>
         </left>
 

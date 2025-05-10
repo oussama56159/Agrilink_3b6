@@ -5,7 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -77,6 +79,23 @@ public class ModifyPersonalDetailsController implements Initializable {
     @FXML private TextField password;
 
     @FXML private TextField confirmPassword;
+    @FXML
+    private Button dashboardBtn;
+
+    @FXML
+    private Button forumBtn;
+
+    @FXML
+    private Button usersBtn;
+
+    @FXML
+    private Button productsBtn;
+
+    @FXML
+    private Button fournisseur;
+
+    @FXML
+    private Button commande;
 
 
     private static final double AVATAR_SIZE = 120;
@@ -85,7 +104,7 @@ public class ModifyPersonalDetailsController implements Initializable {
     private UserService userService;
     private User currentUser;
     private File selectedImageFile;
-    private String originalEmail; // Store original email to check if it changed
+    private String originalEmail;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -368,7 +387,7 @@ public class ModifyPersonalDetailsController implements Initializable {
     }
 
     private boolean emailExists(String email) throws Exception {
-        // This is a simple implementation - you might want to add a specific method to UserService
+
         try {
             // Get all users and check if any has the same email
             for (User user : userService.DisplayAll()) {
@@ -466,11 +485,95 @@ public class ModifyPersonalDetailsController implements Initializable {
 
     @FXML private void navigateToDashboard() { loadView("Dashboard"); }
 
-    @FXML private void navigateToUsers()     { loadView("UserManagement"); }
-    @FXML private void navigateToProducts()  { loadView("Products"); }
-    @FXML private void navigateToStatistics(){ loadView("Statistics"); }
-    @FXML private void navigateToSettings()  { loadView("Settings"); }
-    @FXML private void handleLogout()        { loadView("Connexion"); }
+    @FXML
+    private void handleNavigation(ActionEvent event) {
+        if (event.getSource() instanceof Button) {
+            Button clickedButton = (Button) event.getSource();
+
+            try {
+                String viewName = "";
+
+                if (clickedButton == dashboardBtn) {
+                    viewName = "Dashboard";
+                } else if (clickedButton == forumBtn) {
+                    viewName = "Forum";
+                } else if (clickedButton == usersBtn) {
+                    viewName = "UserManagement";
+                } else if (clickedButton == productsBtn) {
+                    viewName = "Products";
+                } else if (clickedButton ==fournisseur ) {
+                    viewName = "Statistics";
+                } else if (clickedButton == commande) {
+                    viewName = "Settings";
+                }
+
+                if (!viewName.isEmpty()) {
+                    // Get the current scene from the event source
+                    Scene currentScene = ((Node) event.getSource()).getScene();
+                    if (currentScene != null) {
+                        // Load the view through MainController
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Main.fxml"));
+                        Parent root = loader.load();
+                        MainController mainController = loader.getController();
+                        mainController.loadView(viewName);
+
+                        // Replace scene content
+                        currentScene.setRoot(root);
+                    } else {
+                        System.out.println("Error: Current scene is null");
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error navigating to view: " + e.getMessage());
+            }
+        }
+    }
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        try {
+            // Get the current scene from the event source
+            Scene currentScene = ((Node) event.getSource()).getScene();
+            if (currentScene != null) {
+                // Navigate back to login screen
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Connexion.fxml"));
+                Parent root = loader.load();
+
+                // Replace scene content
+                currentScene.setRoot(root);
+                System.out.println("User logged out");
+            } else {
+                System.out.println("Error: Current scene is null");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error navigating to login screen: " + e.getMessage());
+        }
+    }
+    public void navigateToUserProfile(ActionEvent actionEvent) {
+        try {
+            // Get the current scene from the event source
+            Scene currentScene = ((Node) actionEvent.getSource()).getScene();
+            if (currentScene != null) {
+                // Navigate to user profile view through MainController
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Main.fxml"));
+                Parent root = loader.load();
+                MainController mainController = loader.getController();
+
+                // Use "UserProfile" instead of "UserProfileView" to match your file name
+                mainController.loadView("UserProfileView");
+
+                // Replace scene content
+                currentScene.setRoot(root);
+                System.out.println("Navigated to User Profile");
+            } else {
+                System.out.println("Error: Current scene is null");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error navigating to User Profile: " + e.getMessage());
+        }
+    }
 
     private void loadView(String viewName) {
         try {
@@ -608,4 +711,5 @@ public class ModifyPersonalDetailsController implements Initializable {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
 }

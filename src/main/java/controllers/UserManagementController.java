@@ -6,7 +6,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -55,10 +54,10 @@ public class UserManagementController implements Initializable {
     private Button productsBtn;
 
     @FXML
-    private Button statisticsBtn;
+    private Button fournisseur;
 
     @FXML
-    private Button settingsBtn;
+    private Button commande;
 
     @FXML
     private Button logoutBtn;
@@ -145,7 +144,7 @@ public class UserManagementController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur de base de données",
                     "Impossible de se connecter à la base de données. Veuillez contacter le support.");
         }
-         displayCurrentAdminInfo();
+        displayCurrentUserInfo();
         // Initialize filter comboboxes
         if (roleFilter != null) {
             roleFilter.setItems(FXCollections.observableArrayList("Tous les rôles", "Administrateur","utilisateur"));
@@ -262,7 +261,7 @@ public class UserManagementController implements Initializable {
         }
     }
 
-    private void displayCurrentAdminInfo() {
+    private void  displayCurrentUserInfo() {
         User current = SessionManager.getInstance().getCurrentUser();
         if (current != null) {
             adminBtn.setText(current.getFirstName() + " " + current.getLastName());
@@ -378,9 +377,9 @@ public class UserManagementController implements Initializable {
                     viewName = "UserManagement";
                 } else if (clickedButton == productsBtn) {
                     viewName = "Products";
-                } else if (clickedButton == statisticsBtn) {
+                } else if (clickedButton ==fournisseur ) {
                     viewName = "Statistics";
-                } else if (clickedButton == settingsBtn) {
+                } else if (clickedButton == commande) {
                     viewName = "Settings";
                 }
 

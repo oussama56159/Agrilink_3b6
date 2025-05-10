@@ -24,45 +24,42 @@
         <URL value="@/styles/UserAdd.css" />
     </stylesheets>
 
-    <!-- Sidebar -->
-    <VBox prefWidth="200" styleClass="sidebar">
-        <!-- Logo Container -->
-        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="logo-container">
-            <padding>
-                <Insets bottom="15" left="15" right="15" top="15" />
-            </padding>
-            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@/imgs/logo.png" />
-                </image>
-            </ImageView>
-            <Label styleClass="logo-text" text="AgriLink" />
-        </HBox>
+    <!-- Left Sidebar -->
+        <VBox prefWidth="200" styleClass="sidebar">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="logo-container">
+                <padding>
+                    <Insets bottom="15" left="15" right="15" top="15" />
+                </padding>
+                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/imgs/logo.png" />
+                    </image>
+                </ImageView>
+                <Label styleClass="logo-text" text="AgriLink" />
+            </HBox>
 
-        <!-- Navigation Buttons -->
-        <Button fx:id="dashboardBtn" onAction="#navigateToUsers" styleClass="nav-button" text="Tableau de bord" />
-        <Button fx:id="usersBtn" onAction="#navigateToUsers" styleClass="sidebar-button, active-sidebar-button" text="Utilisateurs" />
-        <Button fx:id="productsBtn" onAction="#navigateToUsers" styleClass="nav-button" text="Produits" />
-        <Button fx:id="statisticsBtn" onAction="#navigateToUsers" styleClass="nav-button" text="Statistiques" />
-        <Button fx:id="settingsBtn" onAction="#navigateToUsers" styleClass="nav-button" text="Paramètres" />
+            <Button fx:id="dashboardBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Tableau de bord" />
+            <Button fx:id="forumBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Forum" />
+            <Button fx:id="eventsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Événements" />
+            <Button fx:id="usersBtn" onAction="#handleNavigation" styleClass="sidebar-button, active-sidebar-button" text="Utilisateurs" />
+            <Button fx:id="productsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Produits" />
+            <Button fx:id="fournisseur" onAction="#handleNavigation" styleClass="sidebar-button" text="fournisseur" />
+            <Button fx:id="commande" onAction="#handleNavigation" styleClass="sidebar-button" text="commande" />
 
-        <!-- Spacer -->
-        <Region VBox.vgrow="ALWAYS" />
+            <Region VBox.vgrow="ALWAYS" />
 
-        <!-- Logout Button -->
-        <Button fx:id="logoutBtn" onAction="#handleLogout" styleClass="nav-button, logout-button" text="Déconnexion" />
+            <Button fx:id="logoutBtn" onAction="#handleLogout" styleClass="sidebar-button, logout-button" text="Déconnexion" />
+            <Button fx:id="adminBtn" onAction="#navigateToUserProfile" prefHeight="25.0" prefWidth="87.0" styleClass="sidebar-button, admin-button" text="Admin" />
 
-        <!-- Admin Section -->
-        <HBox alignment="CENTER_LEFT" spacing="5" styleClass="admin-section">
-            <padding>
-                <Insets bottom="15" left="15" right="15" top="15" />
-            </padding>
-            <VBox>
-                <Label styleClass="admin-label" text="Admin" />
-                <Label styleClass="admin-email" text="admin@agrilink.com" />
-            </VBox>
-        </HBox>
-    </VBox>
+            <HBox alignment="CENTER_LEFT" spacing="5" styleClass="admin-section">
+                <padding>
+                    <Insets bottom="15" left="15" right="15" top="15" />
+                </padding>
+                <Label fx:id="adminEmailLabel" styleClass="admin-email" text="admin@agrilink.com" />
+                <VBox />
+            </HBox>
+        </VBox>
+
 
     <!-- Main Content with ScrollPane -->
     <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="main-scroll-pane" HBox.hgrow="ALWAYS">

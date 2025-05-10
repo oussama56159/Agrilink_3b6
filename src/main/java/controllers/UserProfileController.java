@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,6 +33,18 @@ public class UserProfileController implements Initializable {
     @FXML private Button editProfileBtn, productsTabBtn, reviewsTabBtn, eventsTabBtn, publicationsTabBtn, addProductBtn;
     @FXML private VBox productsTabContent, reviewsTabContent, eventsTabContent, publicationsTabContent;
     @FXML private Label sidebarUserName, sidebarUserEmail;
+    @FXML
+    private Button adminBtn;
+    @FXML private Label adminEmailLabel;
+
+    @FXML
+    private Button forumBtn;
+
+    @FXML
+    private Button fournisseur;
+
+    @FXML
+    private Button commande;
 
     private static final double AVATAR_SIZE = 120;
     private static final double RADIUS = AVATAR_SIZE / 2;
@@ -61,6 +74,7 @@ public class UserProfileController implements Initializable {
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de base de données", "Impossible de se connecter à la base de données.");
         }
+        displayCurrentUserInfo();
     }
 
     public void loadCurrentUserData() {
@@ -228,27 +242,51 @@ public class UserProfileController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Erreur de navigation", "Impossible de naviguer vers le formulaire d'ajout de produit.");
         }
     }
+    @FXML
+    private void handleNavigation(ActionEvent event) {
+        if (event.getSource() instanceof Button) {
+            Button clickedButton = (Button) event.getSource();
 
-    @FXML private void handleNavigation(ActionEvent event) {
-        Button clicked = (Button) event.getSource();
-        String viewName = switch (clicked.getId()) {
-            case "dashboardBtn" -> "Dashboard";
-            case "usersBtn" -> "UserManagement";
-            case "productsBtn" -> "Products";
-            case "statisticsBtn" -> "Statistics";
-            case "settingsBtn" -> "Settings";
-            default -> "";
-        };
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Main.fxml"));
-            Parent root = loader.load();
-            MainController mainController = loader.getController();
-            mainController.loadView(viewName);
-            ((Node) event.getSource()).getScene().setRoot(root);
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de navigation", "Impossible de charger la vue.");
+            try {
+                String viewName = "";
+
+                if (clickedButton == dashboardBtn) {
+                    viewName = "Dashboard";
+                } else if (clickedButton == forumBtn) {
+                    viewName = "Forum";
+                } else if (clickedButton == usersBtn) {
+                    viewName = "UserManagement";
+                } else if (clickedButton == productsBtn) {
+                    viewName = "Products";
+                } else if (clickedButton ==fournisseur ) {
+                    viewName = "Statistics";
+                } else if (clickedButton == commande) {
+                    viewName = "Settings";
+                }
+
+                if (!viewName.isEmpty()) {
+                    // Get the current scene from the event source
+                    Scene currentScene = ((Node) event.getSource()).getScene();
+                    if (currentScene != null) {
+                        // Load the view through MainController
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Main.fxml"));
+                        Parent root = loader.load();
+                        MainController mainController = loader.getController();
+                        mainController.loadView(viewName);
+
+                        // Replace scene content
+                        currentScene.setRoot(root);
+                    } else {
+                        System.out.println("Error: Current scene is null");
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error navigating to view: " + e.getMessage());
+            }
         }
     }
+
 
     @FXML private void handleLogout(ActionEvent event) {
         try {
@@ -282,5 +320,12 @@ public class UserProfileController implements Initializable {
         this.currentUserEmail = user.getEmail();
 
         loadProfileImage();
+    }
+    private void  displayCurrentUserInfo() {
+        User current = SessionManager.getInstance().getCurrentUser();
+        if (current != null) {
+            adminBtn.setText(current.getFirstName() + " " + current.getLastName());
+            adminEmailLabel.setText(current.getEmail());
+        }
     }
 }

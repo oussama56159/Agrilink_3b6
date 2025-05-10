@@ -37,21 +37,22 @@
 
             <Button fx:id="dashboardBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Tableau de bord" />
             <Button fx:id="forumBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Forum" />
+            <Button fx:id="eventsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Événements" />
             <Button fx:id="usersBtn" onAction="#handleNavigation" styleClass="sidebar-button, active-sidebar-button" text="Utilisateurs" />
             <Button fx:id="productsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Produits" />
-            <Button fx:id="statisticsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Statistiques" />
-            <Button fx:id="settingsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Paramètres" />
+            <Button fx:id="fournisseur" onAction="#handleNavigation" styleClass="sidebar-button" text="fournisseur" />
+            <Button fx:id="commande" onAction="#handleNavigation" styleClass="sidebar-button" text="commande" />
 
             <Region VBox.vgrow="ALWAYS" />
 
             <Button fx:id="logoutBtn" onAction="#handleLogout" styleClass="sidebar-button, logout-button" text="Déconnexion" />
-              <Button fx:id="adminBtn" onAction="#navigateToUserProfile" prefHeight="25.0" prefWidth="87.0" styleClass="sidebar-button, admin-button" text="Admin" />
+            <Button fx:id="adminBtn" onAction="#navigateToUserProfile" prefHeight="25.0" prefWidth="87.0" styleClass="sidebar-button, admin-button" text="Admin" />
 
             <HBox alignment="CENTER_LEFT" spacing="5" styleClass="admin-section">
                 <padding>
                     <Insets bottom="15" left="15" right="15" top="15" />
                 </padding>
-                 <Label  fx:id="adminEmailLabel" styleClass="admin-email" text="admin@agrilink.com" />
+                <Label fx:id="adminEmailLabel" styleClass="admin-email" text="admin@agrilink.com" />
                 <VBox />
             </HBox>
         </VBox>

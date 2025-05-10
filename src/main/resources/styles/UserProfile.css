@@ -327,3 +327,71 @@
 .add-icon {
     -fx-fill: white;
 }
+/* Sidebar Styles */
+.sidebar {
+    -fx-background-color: #2e6e4a;
+    -fx-padding: 0;
+}
+
+.logo-container {
+    -fx-padding: 15px;
+}
+
+.logo-text {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-alignment: center-left;
+    -fx-padding: 12px 15px;
+    -fx-cursor: hand;
+    -fx-pref-width: 200px;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #3a8a5f;
+}
+
+.sidebar-button.active-sidebar-button {
+    -fx-background-color: #3a8a5f;
+    -fx-font-weight: bold;
+}
+
+.logout-button {
+    -fx-background-color: #255c3e;
+    -fx-text-fill: #ffcccc;
+}
+
+.logout-button:hover {
+    -fx-background-color: #c62828;
+    -fx-text-fill: white;
+}
+
+.admin-section {
+    -fx-padding: 15px;
+    -fx-background-color: #255c3e;
+}
+
+.admin-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.admin-button {
+    -fx-background-color: #255c3e;
+    -fx-text-fill: #ffcccc;
+}
+
+.admin-button:hover {
+    -fx-background-color: #669d6b;
+    -fx-text-fill: white;
+}
+.admin-email {
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 12px;
+}

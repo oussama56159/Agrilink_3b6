@@ -5,7 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,6 +17,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import models.User;
 import services.UserService;
 import services.UserServiceImpl;
+import utils.SessionManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,6 +80,26 @@ public class UserModifyController implements Initializable {
     @FXML private TextField password;
 
     @FXML private TextField confirmPassword;
+    @FXML
+    private Button dashboardBtn;
+
+    @FXML
+    private Button forumBtn;
+
+    @FXML
+    private Button usersBtn;
+
+    @FXML
+    private Button productsBtn;
+
+    @FXML
+    private Button fournisseur;
+
+    @FXML
+    private Button commande;
+    @FXML
+    private Button adminBtn;
+    @FXML private Label adminEmailLabel;
 
 
     private static final double AVATAR_SIZE = 120;
@@ -132,7 +155,7 @@ public class UserModifyController implements Initializable {
         if (registrationDatePicker != null) {
             registrationDatePicker.setValue(LocalDate.now());
         }
-
+        displayCurrentUserInfo();
     }
     @FXML
     private void handleChangePhoto(ActionEvent event) {
@@ -566,5 +589,101 @@ public class UserModifyController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    @FXML
+    private void handleNavigation(ActionEvent event) {
+        if (event.getSource() instanceof Button) {
+            Button clickedButton = (Button) event.getSource();
+
+            try {
+                String viewName = "";
+
+                if (clickedButton == dashboardBtn) {
+                    viewName = "Dashboard";
+                } else if (clickedButton == forumBtn) {
+                    viewName = "Forum";
+                } else if (clickedButton == usersBtn) {
+                    viewName = "UserManagement";
+                } else if (clickedButton == productsBtn) {
+                    viewName = "Products";
+                } else if (clickedButton ==fournisseur ) {
+                    viewName = "Statistics";
+                } else if (clickedButton == commande) {
+                    viewName = "Settings";
+                }
+
+                if (!viewName.isEmpty()) {
+                    // Get the current scene from the event source
+                    Scene currentScene = ((Node) event.getSource()).getScene();
+                    if (currentScene != null) {
+                        // Load the view through MainController
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Main.fxml"));
+                        Parent root = loader.load();
+                        MainController mainController = loader.getController();
+                        mainController.loadView(viewName);
+
+                        // Replace scene content
+                        currentScene.setRoot(root);
+                    } else {
+                        System.out.println("Error: Current scene is null");
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error navigating to view: " + e.getMessage());
+            }
+        }
+    }
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        try {
+            // Get the current scene from the event source
+            Scene currentScene = ((Node) event.getSource()).getScene();
+            if (currentScene != null) {
+                // Navigate back to login screen
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Connexion.fxml"));
+                Parent root = loader.load();
+
+                // Replace scene content
+                currentScene.setRoot(root);
+                System.out.println("User logged out");
+            } else {
+                System.out.println("Error: Current scene is null");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error navigating to login screen: " + e.getMessage());
+        }
+    }
+    public void navigateToUserProfile(ActionEvent actionEvent) {
+        try {
+            // Get the current scene from the event source
+            Scene currentScene = ((Node) actionEvent.getSource()).getScene();
+            if (currentScene != null) {
+                // Navigate to user profile view through MainController
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Main.fxml"));
+                Parent root = loader.load();
+                MainController mainController = loader.getController();
+
+                // Use "UserProfile" instead of "UserProfileView" to match your file name
+                mainController.loadView("UserProfileView");
+
+                // Replace scene content
+                currentScene.setRoot(root);
+                System.out.println("Navigated to User Profile");
+            } else {
+                System.out.println("Error: Current scene is null");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error navigating to User Profile: " + e.getMessage());
+        }
+    }
+    private void  displayCurrentUserInfo() {
+        User current = SessionManager.getInstance().getCurrentUser();
+        if (current != null) {
+            adminBtn.setText(current.getFirstName() + " " + current.getLastName());
+            adminEmailLabel.setText(current.getEmail());
+        }
     }
 }

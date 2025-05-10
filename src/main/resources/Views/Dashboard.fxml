@@ -9,6 +9,7 @@
 <?import javafx.scene.control.ScrollPane?>
 
 <BorderPane stylesheets="@/styles/usermanagement.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DashboradController">
+    <!-- Left Sidebar -->
     <left>
         <VBox prefWidth="200" styleClass="sidebar">
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="logo-container">
@@ -17,28 +18,30 @@
                 </padding>
                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../imgs/logo.png" />
+                        <Image url="@/imgs/logo.png" />
                     </image>
                 </ImageView>
                 <Label styleClass="logo-text" text="AgriLink" />
             </HBox>
 
-            <Button fx:id="dashboardBtn" styleClass="sidebar-button, active-sidebar-button" text="Tableau de bord" />
-            <Button fx:id="usersBtn" styleClass="sidebar-button" text="Utilisateurs" />
-            <Button fx:id="productsBtn" styleClass="sidebar-button" text="Produits" />
-            <Button fx:id="statisticsBtn" styleClass="sidebar-button" text="Statistiques" />
-            <Button fx:id="settingsBtn" styleClass="sidebar-button" text="Paramètres" />
+            <Button fx:id="dashboardBtn" onAction="#handleNavigation" styleClass="sidebar-button,active-sidebar-button" text="Tableau de bord" />
+            <Button fx:id="forumBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Forum" />
+            <Button fx:id="eventsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Événements" />
+            <Button fx:id="usersBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Utilisateurs" />
+            <Button fx:id="productsBtn" onAction="#handleNavigation" styleClass="sidebar-button" text="Produits" />
+            <Button fx:id="fournisseur" onAction="#handleNavigation" styleClass="sidebar-button" text="fournisseur" />
+            <Button fx:id="commande" onAction="#handleNavigation" styleClass="sidebar-button" text="commande" />
 
             <Region VBox.vgrow="ALWAYS" />
 
             <Button fx:id="logoutBtn" onAction="#handleLogout" styleClass="sidebar-button, logout-button" text="Déconnexion" />
-            <Button fx:id="viewPf" onAction="#navigateToUserProfile" prefHeight="25.0" prefWidth="87.0" styleClass="sidebar-button, admin-button" text="user" />
+            <Button fx:id="adminBtn" onAction="#navigateToUserProfile" prefHeight="25.0" prefWidth="87.0" styleClass="sidebar-button, admin-button" text="Admin" />
 
             <HBox alignment="CENTER_LEFT" spacing="5" styleClass="admin-section">
                 <padding>
                     <Insets bottom="15" left="15" right="15" top="15" />
                 </padding>
-                <Label fx:id="MailLabel" styleClass="admin-email" text="user@agrilink.com" />
+                <Label fx:id="adminEmailLabel" styleClass="admin-email" text="admin@agrilink.com" />
                 <VBox />
             </HBox>
         </VBox>

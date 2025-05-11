@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<GridPane stylesheets="@/styles/inscription.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.InscriptionController">
+<GridPane stylesheets="@/styles/inscription.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.InscriptionController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="400.0" percentWidth="50.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="400.0" percentWidth="50.0" />

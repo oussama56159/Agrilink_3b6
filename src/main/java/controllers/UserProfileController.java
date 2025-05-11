@@ -255,26 +255,46 @@ public class UserProfileController implements Initializable {
                 } else if (clickedButton == forumBtn) {
                     viewName = "Forum";
                 } else if (clickedButton == usersBtn) {
+                    // Only admins can access User Management
+                    User current = SessionManager.getInstance().getCurrentUser();
+                    if (current == null ||
+                            !"administrateur".equalsIgnoreCase(current.getRole())) {
+                        showAlert(
+                                Alert.AlertType.ERROR,
+                                "Accès refusé",
+                                "Vous n'avez pas la permission pour accéder à la gestion des utilisateurs."
+                        );
+                        return;
+                    }
                     viewName = "UserManagement";
                 } else if (clickedButton == productsBtn) {
                     viewName = "Products";
-                } else if (clickedButton ==fournisseur ) {
+                } else if (clickedButton == fournisseur) {
+                    // Only admins can access Fournisseur (Statistics) view
+                    User current = SessionManager.getInstance().getCurrentUser();
+                    if (current == null ||
+                            !"administrateur".equalsIgnoreCase(current.getRole())) {
+                        showAlert(
+                                Alert.AlertType.ERROR,
+                                "Accès refusé",
+                                "Vous n'avez pas la permission pour accéder à la section fournisseurs."
+                        );
+                        return;
+                    }
                     viewName = "Statistics";
                 } else if (clickedButton == commande) {
                     viewName = "Settings";
                 }
 
                 if (!viewName.isEmpty()) {
-                    // Get the current scene from the event source
                     Scene currentScene = ((Node) event.getSource()).getScene();
                     if (currentScene != null) {
-                        // Load the view through MainController
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/Main.fxml"));
+                        FXMLLoader loader = new FXMLLoader(
+                                getClass().getResource("/Views/Main.fxml")
+                        );
                         Parent root = loader.load();
                         MainController mainController = loader.getController();
                         mainController.loadView(viewName);
-
-                        // Replace scene content
                         currentScene.setRoot(root);
                     } else {
                         System.out.println("Error: Current scene is null");

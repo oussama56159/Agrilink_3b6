@@ -8,15 +8,18 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
 
-    // Database configuration
-    private static final String URL = "jdbc:mysql://localhost:3306/agrilink";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
-
     private DatabaseConnection() throws SQLException {
+        // Get database configuration from ConfigManager
+        ConfigManager config = ConfigManager.getInstance();
+        String url = config.getDatabaseUrl();
+        String user = config.getDatabaseUser();
+        String password = config.getDatabasePassword();
+        String driver = config.getDatabaseDriver();
+        
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            Class.forName(driver);
+            this.connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Connected to database: " + url);
         } catch (ClassNotFoundException ex) {
             System.err.println("Database Driver not found: " + ex.getMessage());
             throw new SQLException("Database Driver not found", ex);
